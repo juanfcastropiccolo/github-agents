@@ -6,8 +6,8 @@ import json
 from datetime import datetime, timedelta
 
 # Set up the Streamlit App
-st.title("AI Customer Support Agent with Memory 🛒")
-st.caption("Chat with a customer support assistant who remembers your past interactions.")
+st.title("MenaschesBot, tu asistente personal. 🏢")
+st.caption("Chateá con nuestro agente de inteligencia artificial capaz de ayudarte en todas tus consultas.")
 
 # Set the OpenAI API key
 openai_api_key = st.text_input("Enter OpenAI API Key", type="password")
@@ -53,7 +53,7 @@ if openai_api_key:
                 response = self.client.chat.completions.create(
                     model="gpt-4",
                     messages=[
-                        {"role": "system", "content": "You are a customer support AI agent for TechGadgets.com, an online electronics store."},
+                        {"role": "system", "content": "You are a customer support AI agent for MenaschesProp, a real estate company, and you speak both english and spanish."},
                         {"role": "user", "content": full_prompt}
                     ]
                 )
@@ -82,7 +82,7 @@ if openai_api_key:
                 order_date = (today - timedelta(days=10)).strftime("%B %d, %Y")
                 expected_delivery = (today + timedelta(days=2)).strftime("%B %d, %Y")
 
-                prompt = f"""Generate a detailed customer profile and order history for a TechGadgets.com customer with ID {user_id}. Include:
+                prompt = f"""Generate a detailed customer profile and order history for a MenaschesProp customer with ID {user_id}. Include:
                 1. Customer name and basic info
                 2. A recent order of a high-end electronic device (placed on {order_date}, to be delivered by {expected_delivery})
                 3. Order details (product, price, order number)
@@ -128,9 +128,9 @@ if openai_api_key:
     support_agent = CustomerSupportAIAgent()
 
     # Sidebar for customer ID and memory view
-    st.sidebar.title("Enter your Customer ID:")
+    st.sidebar.title("Ingrese su ID de Cliente:")
     previous_customer_id = st.session_state.get("previous_customer_id", None)
-    customer_id = st.sidebar.text_input("Enter your Customer ID")
+    customer_id = st.sidebar.text_input("Ingrese su ID de Cliente")
 
     if customer_id != previous_customer_id:
         st.session_state.messages = []
@@ -138,24 +138,24 @@ if openai_api_key:
         st.session_state.customer_data = None
 
     # Add button to generate synthetic data
-    if st.sidebar.button("Generate Synthetic Data"):
+    if st.sidebar.button("Generar Data de Cliente"):
         if customer_id:
-            with st.spinner("Generating customer data..."):
+            with st.spinner("Generando data de cliente..."):
                 st.session_state.customer_data = support_agent.generate_synthetic_data(customer_id)
             if st.session_state.customer_data:
-                st.sidebar.success("Synthetic data generated successfully!")
+                st.sidebar.success("Data generada exitosamente!")
             else:
-                st.sidebar.error("Failed to generate synthetic data.")
+                st.sidebar.error("Error en la generación de data.")
         else:
-            st.sidebar.error("Please enter a customer ID first.")
+            st.sidebar.error("Por favor, ingrese su ID de Cliente primero.")
 
-    if st.sidebar.button("View Customer Profile"):
+    if st.sidebar.button("Ver Perfil de Cliente"):
         if st.session_state.customer_data:
             st.sidebar.json(st.session_state.customer_data)
         else:
             st.sidebar.info("No customer data generated yet. Click 'Generate Synthetic Data' first.")
 
-    if st.sidebar.button("View Memory Info"):
+    if st.sidebar.button("Ver Información de Memoria"):
         if customer_id:
             memories = support_agent.get_memories(user_id=customer_id)
             if memories:
@@ -179,7 +179,7 @@ if openai_api_key:
             st.markdown(message["content"])
 
     # Accept user input
-    query = st.chat_input("How can I assist you today?")
+    query = st.chat_input("Cómo puedo ayudarte hoy?")
 
     if query and customer_id:
         # Add user message to chat history
@@ -197,7 +197,7 @@ if openai_api_key:
             st.markdown(answer)
 
     elif not customer_id:
-        st.error("Please enter a customer ID to start the chat.")
+        st.error("Por favor, ingrese un ID de Cliente para iniciar el chat.")
 
 else:
     st.warning("Please enter your OpenAI API key to use the customer support agent.")
